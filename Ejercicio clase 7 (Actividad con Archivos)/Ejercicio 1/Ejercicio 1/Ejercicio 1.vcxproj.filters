@@ -32,5 +32,8 @@
     <ClInclude Include="Fecha.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="rlutil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

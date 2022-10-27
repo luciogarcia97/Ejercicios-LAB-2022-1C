@@ -26,7 +26,13 @@ public:
 	char getTipoExamen();
 	std::string toString();
 
+	bool nuevoExamen();
+	Examen cargarExamen();
+	void listarExamen();
+
+	bool guardarEnDisco();
 	bool guardarEnDisco(Examen examen);
+	bool leerDeDisco(int posicion);
 	int getCantidad();
 };
 

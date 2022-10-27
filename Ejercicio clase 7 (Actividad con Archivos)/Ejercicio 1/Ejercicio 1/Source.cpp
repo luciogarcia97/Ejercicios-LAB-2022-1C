@@ -1,25 +1,64 @@
 #include <iostream>
 using namespace std;
 
+#include "rlutil.h"
 #include "Examen.h"
 #include "Fecha.h"
 
-void ListarExamenes()
+int buscarLegajo(int legajo)
 {
 	Examen obj;
-	FILE* p = fopen("examenes.dat", "rb");
-	if (p == nullptr) { return; }
-	while (fread(&obj, sizeof(Examen), 1, p) == 1)
+	int cantidad = obj.getCantidad();
+	for (int i = 0; i < cantidad; i++)
 	{
-		cout << obj.toString() << endl;
+		obj.leerDeDisco(i);
+		if (obj.getLegajo() == legajo)
+		{
+			return i;
+		}
 	}
-	fclose(p);
+	return -1;
 }
 
-int BuscarMejorNota(int materia, int legajo)
+void BuscarMejorNota(int legajo, int materia)
 {
-	//TO DO
-	return 0;
+	Examen obj;
+	bool flag = false;
+	int posicionMaxima = 0, cont = 0;
+	float calificacionMaxima = 0;
+	int cantidad = obj.getCantidad();
+
+	for (int i = 0; i < cantidad; i++)
+	{
+		obj.leerDeDisco(i);
+		if (obj.getLegajo() == legajo)
+		{
+			cont++;
+			if (obj.getCodigoMateria() == materia)
+			{
+				if (!flag)
+				{
+					posicionMaxima = i;
+					calificacionMaxima = obj.getCalificacion();
+					flag = true;
+				}
+				else if(obj.getCalificacion() > calificacionMaxima)
+				{
+					posicionMaxima = i;
+					calificacionMaxima = obj.getCalificacion();
+				}
+			}
+		}
+	}
+
+	if (cont > 0)
+	{
+		cout << "La calificacion maxima fue de " << calificacionMaxima << endl;
+	}
+	else
+	{
+		cout << "No existe el registro" << endl;
+	}
 }
 
 int main() {
@@ -27,6 +66,7 @@ int main() {
 	
 	do
 	{
+		rlutil::cls();
 		std::cout << "MENU PRINCIPAL" << std::endl;
 		std::cout << "----------------------------" << std::endl;
 		std::cout << "1 - CARGAR EXAMEN" << std::endl;
@@ -39,17 +79,29 @@ int main() {
 		{
 			case 1:
 			{
+				Examen obj;
 				std::cout << "CARGAR EXAMEN" << std::endl;
 				std::cout << "----------------------------" << std::endl;
-				//Un examen a la vez. 
+				if (obj.nuevoExamen())
+				{
+					std::cout << "Guardo correctamente" << std::endl;
+				}
+				else
+				{
+					std::cout << "No se guardo correctamente" << std::endl;
+				}
+				std::cout << "Presionar una tecla para volver al menu principal" << endl;
+				rlutil::anykey();
 				//OPCIONAL: No puede repetirse la combinación de Legajo, IDMateria y Fecha.
 			}
 			break;
 			case 2:
 			{
-				std::cout << "LISTAR EXAMENES" << std::endl;
-				std::cout << "----------------------------" << std::endl;
-				//Listar el total de examenes
+				rlutil::cls();
+				Examen obj;
+				obj.listarExamen();
+				std::cout << "Presionar una tecla para volver al menu principal" << endl;
+				rlutil::anykey();
 			}
 			break;
 			case 3:
@@ -57,9 +109,20 @@ int main() {
 				std::cout << "BUSCAR MEJOR NOTA" << std::endl;
 				std::cout << "----------------------------" << std::endl;
 				//utilizar funcion BuscarMejorNota
+				int legajo, codigo;
+				cout << "Ingrese el legajo: ";
+				cin >> legajo;
+				cout << "Ingrese el codigo de materia: ";
+				cin >> codigo;
+				BuscarMejorNota(legajo, codigo);
+				std::cout << "Presionar una tecla para volver al menu principal" << endl;
+				rlutil::anykey();
 			}
 			break;
 			case 0:
+				rlutil::cls();
+				cout << "Confirmar Salir? (S/N)";
+
 				return 0;
 		}
 	} while (opcion);

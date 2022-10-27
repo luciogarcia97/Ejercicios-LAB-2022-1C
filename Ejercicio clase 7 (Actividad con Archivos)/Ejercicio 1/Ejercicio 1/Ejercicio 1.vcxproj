@@ -146,6 +146,7 @@
   <ItemGroup>
     <ClInclude Include="Examen.h" />
     <ClInclude Include="Fecha.h" />
+    <ClInclude Include="rlutil.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
